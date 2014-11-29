@@ -42,7 +42,12 @@ class ArchetypeManager {
     
    // SINGLETON
    private static ArchetypeManager instance = null
-    
+   
+   private ArchetypeManager()
+   {
+      throw new Exception("Use getInstance method to get an instance of ArchertypeManager")
+   }
+   
    private ArchetypeManager(String repoPath)
    {
       if (repoPath)
@@ -64,22 +69,22 @@ class ArchetypeManager {
     */
    public void loadAll()
    {
-      def path = this.archetypeRepositoryPath
-      loadAllRecursive( path )
+      loadAllRecursive( this.archetypeRepositoryPath )
    }
     
-   private loadAllRecursive( String path )
+   private void loadAllRecursive( String path )
    {
       //println "loadAllRecursive: " + path
       def root = new File( path )
 
       // FIXME: deberia filtrar solo archivos adl
-      root.eachFile { f ->
+      // eachFile sin FileType recorre tambien directorios.
+      root.eachFile(groovy.io.FileType.FILES) { f ->
 
          log.debug("LOAD: [" + f.name + "]")
 
          // PARSEAR ARQUETIPO
-         ADLParser parser = null;
+         ADLParser parser = null
          try
          {
             parser = new ADLParser( f )
@@ -92,6 +97,7 @@ class ArchetypeManager {
          Archetype archetype = null
          try
          {
+            if (!parser) println "AHR: " + f.name
             archetype = parser.archetype()
          }
          catch (Exception e)

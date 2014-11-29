@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/adl-parser-1.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/adl-parser-1.0.2-SNAPSHOT.jar" sourcepath="C:/Documents and Settings/pab/My Documents/GitHub/java-libs/adl-parser/src"/>
 	<classpathentry kind="lib" path="lib/adl-serializer-1.0.2-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/dadl-binding-1.0.2-SNAPSHOT.jar"/>
