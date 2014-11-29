@@ -94,7 +94,45 @@ class ArchetypeManagerTest {
    @Test
    public void testGetArchetypeString()
    {
-      fail("Not yet implemented");
+      def loader = ArchetypeManager.getInstance(path)
+      loader.loadAll()
+      def arch = loader.getArchetype("openEHR-EHR-OBSERVATION.blood_pressure.v1")
+      assert arch.archetypeId.value == "openEHR-EHR-OBSERVATION.blood_pressure.v1"
+      println arch.definition.getClass().getSimpleName()
+      /*
+      arch.physicalPaths().each {
+         println it
+      }
+      */
+      
+      
+      // sistolica
+      println arch.node('/data[at0001]/events[at0006]/data[at0003]/items[at0004]/value').getClass().getSimpleName()
+      
+      assert arch.node('/data[at0001]/events[at0006]/data[at0003]/items[at0004]/value').path() == '/data[at0001]/events[at0006]/data[at0003]/items[at0004]/value'
+      
+      def cdvquantity = arch.node('/data[at0001]/events[at0006]/data[at0003]/items[at0004]/value')
+      def listItems = cdvquantity.getList() // lista de restricciones
+      listItems.each { item ->
+         println item.units // String
+         println item.magnitude // Interval<Double>
+         println item.magnitude.lower
+         println item.magnitude.upper
+      }
+      
+      def datoUnits = 'mm[Hg]'
+      def datoMagnitude = 134.0d
+      
+      def valid = listItems.find { item ->
+         if (item.units == datoUnits &&item.magnitude.has(datoMagnitude)) return true
+      } != null
+      
+      if (valid) println "valid"
+      else println "invalid"
+      
+      
+      // diastolica
+      //println arch.node('/data[at0001]/events[at0006]/data[at0003]/items[at0005]/value')
    }
 
    /**
