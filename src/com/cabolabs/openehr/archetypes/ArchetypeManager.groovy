@@ -8,9 +8,13 @@ import org.openehr.am.archetype.Archetype
 import org.openehr.rm.support.identification.ArchetypeID
 
 // http://www.openehr.org/wiki/display/projects/Java+ADL+Parser+Guide
+
 import se.acode.openehr.parser.*
 
 import org.apache.log4j.Logger
+
+import groovy.transform.Synchronized
+
 import java.util.regex.Pattern
 
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint
@@ -412,9 +416,9 @@ class ArchetypeManager {
        return this.timestamps
    }
    
+   @Synchronized
    public void unloadAll()
    {
-       // FIXME: debe estar sincronizada
        this.cache.clear()
        this.timestamps.clear()
    }
