@@ -216,7 +216,7 @@ class ArchetypeManager {
     * FIXME: type puede venir en mayusculas o en minusculas, y lo necesito en minusculas.
     * FIXME: el resultado de esta operacion deberia ser una lista de arquetipos!
     */
-   public Archetype getArchetype( String type, String idMatchingKey )
+   public Archetype getArchetype( String type, String regex )
    {
        //println "=== getArchetype( "+type+", "+idMatchingKey+" ) ==="
        //type = type.toLowerCase()
@@ -224,7 +224,7 @@ class ArchetypeManager {
        // FIXME: no uso el type porque para guardar los arquetipos no lo uso,
        //        seria una optimizacion para buscar.
        Archetype archetype = null
-       def p = Pattern.compile( ".*"+idMatchingKey+".*" )
+       def p = Pattern.compile( ".*"+regex+".*\\.adl" ) // agrego .adl porque si hay .adls de ADL1.5 en el dir, intenta cargarlo.
        
        // Busca en los arquetipos cargados:
        def iter = this.cache.keySet().iterator()
@@ -259,7 +259,7 @@ class ArchetypeManager {
            }
        }
        
-       if (!adlFile) println "   ERROR: No se encuentra el archivo que matchee con " + "[.*"+idMatchingKey+".*]" + " desde " + root.path
+       if (!adlFile) println "   ERROR: No se encuentra el archivo que matchee con " + "[.*"+regex+".*]" + " desde " + root.path
        else
        {
            //println "   Carga desde: " + adlFile.path
@@ -290,7 +290,7 @@ class ArchetypeManager {
    }
    
    // Correccion para devolver muchos
-   public List<Archetype> getArchetypes( String type, String idMatchingKey )
+   public List<Archetype> getArchetypes( String type, String regex )
    {
        //println "=== getArchetypes( "+type+", "+idMatchingKey+" ) ==="
        //type = type.toLowerCase()
@@ -303,7 +303,7 @@ class ArchetypeManager {
        
        // Puede ser tan complicada como:
        // openEHR-EHR-ITEM_TREE\.medication\.v1|openEHR-EHR-ITEM_TREE\.medication-formulation\.v1|openEHR-EHR-ITEM_TREE\.medication-vaccine\.v1
-       def p = Pattern.compile( ".*"+idMatchingKey+".*" )
+       def p = Pattern.compile( ".*"+regex+".*\\.adl" ) // agrego .adl porque si hay .adls de ADL1.5 en el dir, intenta cargarlo.
        
        /* Saco busqueda en cache porque cuando son varios es mas compleja:
         *  1. buscar en cache y ver todos los que matchean
@@ -340,7 +340,7 @@ class ArchetypeManager {
        
           //println f.name
           //println f.name - '.adl' archetypes\adl_source\structure\openEHR-EHR-ITEM_TREE.medication-formulation.v1.adl - .adl
-          if ( p.matcher(f.name - '.adl').matches() )
+          if ( p.matcher(f.name).matches() )
           {
              adlFiles << f
           }
@@ -348,7 +348,7 @@ class ArchetypeManager {
        
        //println "adlFiles: "+ adlFiles
        
-       if (adlFiles.size() == 0) println "   ERROR: No se encuentra el archivo que matchee con " + "[.*"+idMatchingKey+".*]" + " desde " + root.path
+       if (adlFiles.size() == 0) println "   ERROR: No se encuentra el archivo que matchee con " + "[.*"+regex+".*]" + " desde " + root.path
        else
        {
           def archetype = null
